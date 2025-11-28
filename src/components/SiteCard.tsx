@@ -63,8 +63,12 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
     <div className="site-card">
       <button className="site-card-close" onClick={onClose}>×</button>
 
-      {site.main_image && (
-        <img src={site.main_image} alt={getName()} className="site-card-image" />
+      {(site.main_image || (site.images && site.images.length > 0)) && (
+        <img
+          src={site.main_image || site.images[0].image}
+          alt={getName()}
+          className="site-card-image"
+        />
       )}
 
       <div className="site-card-content">
