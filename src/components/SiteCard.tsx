@@ -65,7 +65,7 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
 
       {(site.main_image || (site.images && site.images.length > 0)) && (
         <img
-          src={site.main_image || site.images[0].image}
+          src={site.main_image || site.images?.[0]?.image}
           alt={getName()}
           className="site-card-image"
         />
