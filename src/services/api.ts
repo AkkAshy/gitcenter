@@ -1,6 +1,4 @@
-const API_URL = process.env.NODE_ENV === 'production'
-  ? 'https://akkanat.pythonanywhere.com/api'
-  : 'http://localhost:8000/api';
+const API_URL = 'https://akkanat.pythonanywhere.com/api';
 
 export const api = {
   async getCategories() {
