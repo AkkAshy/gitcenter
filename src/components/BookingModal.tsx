@@ -59,7 +59,7 @@ function CheckoutForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || loading) {
       return;
     }
 
@@ -73,46 +73,75 @@ function CheckoutForm({
       return;
     }
 
-    // Подтверждаем платёж в Stripe
-    const { error: stripeError, paymentIntent: confirmedIntent } = await stripe.confirmCardPayment(
-      paymentIntent.client_secret,
-      {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: formData.name,
-            email: formData.email,
+    try {
+      // Подтверждаем платёж в Stripe
+      const { error: stripeError, paymentIntent: confirmedIntent } = await stripe.confirmCardPayment(
+        paymentIntent.client_secret,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: formData.name,
+              email: formData.email,
+            },
           },
-        },
+        }
+      );
+
+      // Если платёж уже был подтверждён ранее
+      if (stripeError?.code === 'payment_intent_unexpected_state') {
+        // Платёж уже прошёл, подтверждаем на сервере
+        const confirmation = await api.confirmPayment({
+          payment_intent_id: paymentIntent.payment_intent_id,
+          guide_id: guide.id,
+          site_id: siteId,
+          date: formData.date,
+          time: formData.time,
+          hours: formData.hours,
+          tourist_name: formData.name,
+          tourist_email: formData.email,
+          tourist_phone: formData.phone,
+          notes: formData.notes,
+        });
+
+        if (confirmation.status === 'success') {
+          onSuccess(confirmation);
+        } else {
+          setError(confirmation.error || 'Confirmation failed');
+        }
+        setLoading(false);
+        return;
       }
-    );
 
-    if (stripeError) {
-      setError(stripeError.message || 'Payment failed');
-      setLoading(false);
-      return;
-    }
-
-    if (confirmedIntent?.status === 'succeeded') {
-      // Подтверждаем на нашем сервере
-      const confirmation = await api.confirmPayment({
-        payment_intent_id: paymentIntent.payment_intent_id,
-        guide_id: guide.id,
-        site_id: siteId,
-        date: formData.date,
-        time: formData.time,
-        hours: formData.hours,
-        tourist_name: formData.name,
-        tourist_email: formData.email,
-        tourist_phone: formData.phone,
-        notes: formData.notes,
-      });
-
-      if (confirmation.status === 'success') {
-        onSuccess(confirmation);
-      } else {
-        setError(confirmation.error || 'Confirmation failed');
+      if (stripeError) {
+        setError(stripeError.message || 'Payment failed');
+        setLoading(false);
+        return;
       }
+
+      if (confirmedIntent?.status === 'succeeded') {
+        // Подтверждаем на нашем сервере
+        const confirmation = await api.confirmPayment({
+          payment_intent_id: paymentIntent.payment_intent_id,
+          guide_id: guide.id,
+          site_id: siteId,
+          date: formData.date,
+          time: formData.time,
+          hours: formData.hours,
+          tourist_name: formData.name,
+          tourist_email: formData.email,
+          tourist_phone: formData.phone,
+          notes: formData.notes,
+        });
+
+        if (confirmation.status === 'success') {
+          onSuccess(confirmation);
+        } else {
+          setError(confirmation.error || 'Confirmation failed');
+        }
+      }
+    } catch (err) {
+      setError('Payment processing error');
     }
 
     setLoading(false);
