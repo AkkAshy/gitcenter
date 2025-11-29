@@ -14,10 +14,37 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
   const [guides, setGuides] = useState<Guide[]>([]);
   const [showGuides, setShowGuides] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { lang, t } = useLanguage();
+
+  // Получаем все изображения (main_image + images)
+  const getAllImages = () => {
+    if (!site) return [];
+    const images: string[] = [];
+    if (site.main_image) images.push(site.main_image);
+    if (site.images && site.images.length > 0) {
+      site.images.forEach(img => {
+        if (img.image && !images.includes(img.image)) {
+          images.push(img.image);
+        }
+      });
+    }
+    return images;
+  };
+
+  const allImages = site ? getAllImages() : [];
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+  };
 
   useEffect(() => {
     setLoading(true);
+    setCurrentImageIndex(0); // Сброс индекса при смене сайта
     api.getSite(siteId).then((data) => {
       setSite(data);
       setLoading(false);
@@ -63,12 +90,30 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
     <div className="site-card">
       <button className="site-card-close" onClick={onClose}>×</button>
 
-      {(site.main_image || (site.images && site.images.length > 0)) && (
-        <img
-          src={site.main_image || site.images?.[0]?.image}
-          alt={getName()}
-          className="site-card-image"
-        />
+      {allImages.length > 0 && (
+        <div className="site-card-gallery">
+          <img
+            src={allImages[currentImageIndex]}
+            alt={getName()}
+            className="site-card-image"
+          />
+          {allImages.length > 1 && (
+            <>
+              <button className="gallery-btn gallery-btn-prev" onClick={prevImage}>‹</button>
+              <button className="gallery-btn gallery-btn-next" onClick={nextImage}>›</button>
+              <div className="gallery-dots">
+                {allImages.map((_, idx) => (
+                  <span
+                    key={idx}
+                    className={`gallery-dot ${idx === currentImageIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentImageIndex(idx)}
+                  />
+                ))}
+              </div>
+              <div className="gallery-counter">{currentImageIndex + 1} / {allImages.length}</div>
+            </>
+          )}
+        </div>
       )}
 
       <div className="site-card-content">
