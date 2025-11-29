@@ -4,6 +4,9 @@ import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import { HiSearch } from 'react-icons/hi';
 
+// Wrapper для react-icons для совместимости с React 19
+const SearchIcon = () => React.createElement(HiSearch as React.ComponentType);
+
 interface SearchBarProps {
   onSelect: (siteId: number) => void;
 }
@@ -62,7 +65,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => results.length > 0 && setIsOpen(true)}
       />
-      <span className="search-icon"><HiSearch /></span>
+      <span className="search-icon"><SearchIcon /></span>
 
       {isOpen && results.length > 0 && (
         <div className="search-results">

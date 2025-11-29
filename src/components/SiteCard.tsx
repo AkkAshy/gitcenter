@@ -4,6 +4,13 @@ import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import { HiChevronLeft, HiChevronRight, HiCheck, HiStar, HiX } from 'react-icons/hi';
 
+// Wrapper для react-icons для совместимости с React 19
+const XIcon = () => React.createElement(HiX as React.ComponentType);
+const CheckIcon = () => React.createElement(HiCheck as React.ComponentType);
+const StarIcon = () => React.createElement(HiStar as React.ComponentType);
+const ChevronLeftIcon = () => React.createElement(HiChevronLeft as React.ComponentType);
+const ChevronRightIcon = () => React.createElement(HiChevronRight as React.ComponentType);
+
 interface SiteCardProps {
   siteId: number;
   onClose: () => void;
@@ -89,7 +96,7 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
 
   return (
     <div className="site-card">
-      <button className="site-card-close" onClick={onClose}><HiX /></button>
+      <button className="site-card-close" onClick={onClose}><XIcon /></button>
 
       {allImages.length > 0 && (
         <div className="site-card-gallery">
@@ -100,8 +107,8 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
           />
           {allImages.length > 1 && (
             <>
-              <button className="gallery-btn gallery-btn-prev" onClick={prevImage}><HiChevronLeft /></button>
-              <button className="gallery-btn gallery-btn-next" onClick={nextImage}><HiChevronRight /></button>
+              <button className="gallery-btn gallery-btn-prev" onClick={prevImage}><ChevronLeftIcon /></button>
+              <button className="gallery-btn gallery-btn-next" onClick={nextImage}><ChevronRightIcon /></button>
               <div className="gallery-dots">
                 {allImages.map((_, idx) => (
                   <span
@@ -184,8 +191,8 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
               <div key={guide.id} className="guide-mini-card" onClick={() => onGuideSelect(guide)}>
                 <div className="guide-mini-info">
                   <strong>{guide.full_name}</strong>
-                  {guide.is_verified && <span className="verified-badge"><HiCheck /></span>}
-                  <div className="guide-mini-rating"><HiStar /> {guide.rating} ({guide.total_reviews})</div>
+                  {guide.is_verified && <span className="verified-badge"><CheckIcon /></span>}
+                  <div className="guide-mini-rating"><StarIcon /> {guide.rating} ({guide.total_reviews})</div>
                   <div className="guide-mini-price">
                     {parseInt(guide.price_per_hour).toLocaleString()} {t("so'm/soat", "сум/час", "sum/hour")}
                   </div>

@@ -4,6 +4,9 @@ import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import { HiX } from 'react-icons/hi';
 
+// Wrapper для react-icons для совместимости с React 19
+const XIcon = () => React.createElement(HiX as React.ComponentType);
+
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
@@ -53,7 +56,7 @@ export default function Sidebar({ isOpen, onClose, onSiteSelect }: SidebarProps)
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <h2>{t("Joylar", "Места", "Places")}</h2>
-        <button className="sidebar-close" onClick={onClose}><HiX /></button>
+        <button className="sidebar-close" onClick={onClose}><XIcon /></button>
       </div>
 
       <div className="sidebar-categories">

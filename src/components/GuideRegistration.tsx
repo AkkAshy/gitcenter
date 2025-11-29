@@ -4,6 +4,9 @@ import { useLanguage } from '../context/LanguageContext';
 import { HistoricalSite } from '../types';
 import { HiX } from 'react-icons/hi';
 
+// Wrapper для react-icons для совместимости с React 19
+const XIcon = () => React.createElement(HiX as React.ComponentType);
+
 interface GuideRegistrationProps {
   onClose: () => void;
   onSuccess: () => void;
@@ -189,7 +192,7 @@ export default function GuideRegistration({ onClose, onSuccess }: GuideRegistrat
   return (
     <div className="guide-registration-overlay">
       <div className="guide-registration-modal">
-        <button className="modal-close" onClick={onClose}><HiX /></button>
+        <button className="modal-close" onClick={onClose}><XIcon /></button>
 
         <h2>{t("Gid sifatida ro'yxatdan o'tish", 'Регистрация гида', 'Guide Registration')}</h2>
 

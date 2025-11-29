@@ -3,6 +3,12 @@ import { Guide } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { HiUser, HiCheck, HiStar, HiX } from 'react-icons/hi';
 
+// Wrapper для react-icons для совместимости с React 19
+const XIcon = () => React.createElement(HiX as React.ComponentType);
+const CheckIcon = () => React.createElement(HiCheck as React.ComponentType);
+const StarIcon = () => React.createElement(HiStar as React.ComponentType);
+const UserIcon = () => React.createElement(HiUser as React.ComponentType);
+
 interface GuideCardProps {
   guide: Guide;
   onClose: () => void;
@@ -23,23 +29,23 @@ export default function GuideCard({ guide, onClose }: GuideCardProps) {
 
   return (
     <div className="guide-card">
-      <button className="guide-card-close" onClick={onClose}><HiX /></button>
+      <button className="guide-card-close" onClick={onClose}><XIcon /></button>
 
       <div className="guide-card-header">
         <div className="guide-avatar">
           {guide.avatar ? (
             <img src={guide.avatar} alt={guide.full_name} />
           ) : (
-            <div className="guide-avatar-placeholder"><HiUser /></div>
+            <div className="guide-avatar-placeholder"><UserIcon /></div>
           )}
         </div>
         <div className="guide-header-info">
           <h2>
             {guide.full_name}
-            {guide.is_verified && <span className="verified-badge" title={t("Tasdiqlangan", "Верифицирован", "Verified")}><HiCheck /></span>}
+            {guide.is_verified && <span className="verified-badge" title={t("Tasdiqlangan", "Верифицирован", "Verified")}><CheckIcon /></span>}
           </h2>
           <div className="guide-rating">
-            <HiStar /> {guide.rating} ({guide.total_reviews} {t("sharh", "отзывов", "reviews")})
+            <StarIcon /> {guide.rating} ({guide.total_reviews} {t("sharh", "отзывов", "reviews")})
           </div>
         </div>
       </div>
