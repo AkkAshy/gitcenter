@@ -66,6 +66,7 @@ function App() {
           {selectedGuide && (
             <GuideCard
               guide={selectedGuide}
+              siteId={selectedSiteId ?? undefined}
               onClose={handleCloseGuideCard}
             />
           )}
