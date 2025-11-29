@@ -8,8 +8,8 @@ interface ImageSearchProps {
   onClose: () => void;
 }
 
-// Gemini API ключ
-const GEMINI_API_KEY = 'AIzaSyBugf3LTgWZbGgN3Yass7gsknjAJa8xsIU';
+// Gemini API ключ из .env файла
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY || '';
 
 export default function ImageSearch({ onSiteFound, onClose }: ImageSearchProps) {
   const [image, setImage] = useState<string | null>(null);
