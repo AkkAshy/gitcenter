@@ -70,3 +70,52 @@ export interface MapMarker {
 }
 
 export type Language = 'uz' | 'ru' | 'en';
+
+// Payment types
+export interface PaymentIntent {
+  client_secret: string;
+  payment_intent_id: string;
+  amount: number;
+  amount_display: string;
+  platform_fee: number;
+  guide_amount: number;
+  currency: string;
+}
+
+export interface GuidePrice {
+  guide_id: number;
+  guide_name: string;
+  price_per_hour_uzs: number;
+  price_per_hour_usd: number;
+  platform_fee_percent: number;
+  average_duration: number;
+}
+
+export interface BookingFormData {
+  guide_id: number;
+  site_id?: number;
+  date: string;
+  time: string;
+  hours: number;
+  tourist_name: string;
+  tourist_email: string;
+  tourist_phone: string;
+  notes: string;
+}
+
+export interface PaymentConfirmation {
+  status: string;
+  message: string;
+  booking_id: number;
+  guide_contact: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  booking_details: {
+    date: string;
+    time: string;
+    duration: number;
+    total_paid: string;
+  };
+}

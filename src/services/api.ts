@@ -68,4 +68,48 @@ export const api = {
     });
     return res.json();
   },
+
+  // Payment API
+  async getGuidePrice(guideId: number) {
+    const res = await fetch(`${API_URL}/guides/${guideId}/price/`);
+    return res.json();
+  },
+
+  async createPaymentIntent(data: {
+    guide_id: number;
+    hours: number;
+    email?: string;
+    site_id?: number;
+  }) {
+    const res = await fetch(`${API_URL}/payments/create-intent/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+
+  async confirmPayment(data: {
+    payment_intent_id: string;
+    guide_id: number;
+    site_id?: number;
+    date: string;
+    time: string;
+    hours: number;
+    tourist_name: string;
+    tourist_email: string;
+    tourist_phone: string;
+    notes?: string;
+  }) {
+    const res = await fetch(`${API_URL}/payments/confirm/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
 };
