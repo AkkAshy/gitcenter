@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Category, HistoricalSite } from '../types';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import { HiX } from 'react-icons/hi';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -52,7 +53,7 @@ export default function Sidebar({ isOpen, onClose, onSiteSelect }: SidebarProps)
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <h2>{t("Joylar", "Места", "Places")}</h2>
-        <button className="sidebar-close" onClick={onClose}>×</button>
+        <button className="sidebar-close" onClick={onClose}><HiX /></button>
       </div>
 
       <div className="sidebar-categories">

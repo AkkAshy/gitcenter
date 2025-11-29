@@ -2,6 +2,8 @@ import { useState, useRef } from 'react';
 import { HistoricalSite } from '../types';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import { MdCameraAlt } from 'react-icons/md';
+import { HiArrowRight, HiX } from 'react-icons/hi';
 
 interface ImageSearchProps {
   onSiteFound: (siteId: number) => void;
@@ -146,7 +148,7 @@ If you cannot identify the location or it's not a historical site, respond with 
   return (
     <div className="image-search-overlay" onClick={onClose}>
       <div className="image-search-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>×</button>
+        <button className="modal-close" onClick={onClose}><HiX /></button>
 
         <h2>{t("Rasm bo'yicha qidirish", "Поиск по фото", "Search by Image")}</h2>
         <p className="image-search-hint">
@@ -170,7 +172,7 @@ If you cannot identify the location or it's not a historical site, respond with 
             className="image-upload-area"
             onClick={() => fileInputRef.current?.click()}
           >
-            <div className="upload-icon">📷</div>
+            <div className="upload-icon"><MdCameraAlt /></div>
             <p>{t("Rasm yuklash uchun bosing", "Нажмите чтобы загрузить фото", "Click to upload image")}</p>
             <small>{t("yoki sudrab tashlang", "или перетащите сюда", "or drag and drop")}</small>
           </div>
@@ -235,7 +237,7 @@ If you cannot identify the location or it's not a historical site, respond with 
                      lang === 'en' ? site.category?.name_en : site.category?.name_ru}
                   </small>
                 </div>
-                <span className="view-arrow">→</span>
+                <span className="view-arrow"><HiArrowRight /></span>
               </div>
             ))}
           </div>

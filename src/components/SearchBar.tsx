@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { HistoricalSite } from '../types';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import { HiSearch } from 'react-icons/hi';
 
 interface SearchBarProps {
   onSelect: (siteId: number) => void;
@@ -61,7 +62,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => results.length > 0 && setIsOpen(true)}
       />
-      <span className="search-icon">🔍</span>
+      <span className="search-icon"><HiSearch /></span>
 
       {isOpen && results.length > 0 && (
         <div className="search-results">

@@ -3,6 +3,9 @@ import { useLanguage } from '../context/LanguageContext';
 import { Language } from '../types';
 import SearchBar from './SearchBar';
 import ImageSearch from './ImageSearch';
+import { HiMenu } from 'react-icons/hi';
+import { FaLandmark } from 'react-icons/fa';
+import { MdCameraAlt } from 'react-icons/md';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -22,11 +25,11 @@ export default function Header({ onMenuClick, onSiteSelect }: HeaderProps) {
   return (
     <header className="header">
       <button className="menu-btn" onClick={onMenuClick}>
-        ☰
+        <HiMenu />
       </button>
 
       <div className="header-logo">
-        <span className="logo-icon">🏛️</span>
+        <span className="logo-icon"><FaLandmark /></span>
         <span className="logo-text">Guide Center Map</span>
       </div>
 
@@ -37,7 +40,7 @@ export default function Header({ onMenuClick, onSiteSelect }: HeaderProps) {
         onClick={() => setShowImageSearch(true)}
         title="AI поиск по фото"
       >
-        📷
+        <MdCameraAlt />
       </button>
 
       <div className="language-switcher">

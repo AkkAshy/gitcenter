@@ -1,6 +1,7 @@
 import React from 'react';
 import { Guide } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import { HiUser, HiCheck, HiStar, HiX } from 'react-icons/hi';
 
 interface GuideCardProps {
   guide: Guide;
@@ -22,23 +23,23 @@ export default function GuideCard({ guide, onClose }: GuideCardProps) {
 
   return (
     <div className="guide-card">
-      <button className="guide-card-close" onClick={onClose}>×</button>
+      <button className="guide-card-close" onClick={onClose}><HiX /></button>
 
       <div className="guide-card-header">
         <div className="guide-avatar">
           {guide.avatar ? (
             <img src={guide.avatar} alt={guide.full_name} />
           ) : (
-            <div className="guide-avatar-placeholder">👤</div>
+            <div className="guide-avatar-placeholder"><HiUser /></div>
           )}
         </div>
         <div className="guide-header-info">
           <h2>
             {guide.full_name}
-            {guide.is_verified && <span className="verified-badge" title={t("Tasdiqlangan", "Верифицирован", "Verified")}>✓</span>}
+            {guide.is_verified && <span className="verified-badge" title={t("Tasdiqlangan", "Верифицирован", "Verified")}><HiCheck /></span>}
           </h2>
           <div className="guide-rating">
-            ★ {guide.rating} ({guide.total_reviews} {t("sharh", "отзывов", "reviews")})
+            <HiStar /> {guide.rating} ({guide.total_reviews} {t("sharh", "отзывов", "reviews")})
           </div>
         </div>
       </div>

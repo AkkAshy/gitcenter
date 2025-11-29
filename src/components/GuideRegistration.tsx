@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import { HistoricalSite } from '../types';
+import { HiX } from 'react-icons/hi';
 
 interface GuideRegistrationProps {
   onClose: () => void;
@@ -188,7 +189,7 @@ export default function GuideRegistration({ onClose, onSuccess }: GuideRegistrat
   return (
     <div className="guide-registration-overlay">
       <div className="guide-registration-modal">
-        <button className="modal-close" onClick={onClose}>&times;</button>
+        <button className="modal-close" onClick={onClose}><HiX /></button>
 
         <h2>{t("Gid sifatida ro'yxatdan o'tish", 'Регистрация гида', 'Guide Registration')}</h2>
 

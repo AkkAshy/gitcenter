@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { HistoricalSite, Guide } from '../types';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import { HiChevronLeft, HiChevronRight, HiCheck, HiStar, HiX } from 'react-icons/hi';
 
 interface SiteCardProps {
   siteId: number;
@@ -88,7 +89,7 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
 
   return (
     <div className="site-card">
-      <button className="site-card-close" onClick={onClose}>×</button>
+      <button className="site-card-close" onClick={onClose}><HiX /></button>
 
       {allImages.length > 0 && (
         <div className="site-card-gallery">
@@ -99,8 +100,8 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
           />
           {allImages.length > 1 && (
             <>
-              <button className="gallery-btn gallery-btn-prev" onClick={prevImage}>‹</button>
-              <button className="gallery-btn gallery-btn-next" onClick={nextImage}>›</button>
+              <button className="gallery-btn gallery-btn-prev" onClick={prevImage}><HiChevronLeft /></button>
+              <button className="gallery-btn gallery-btn-next" onClick={nextImage}><HiChevronRight /></button>
               <div className="gallery-dots">
                 {allImages.map((_, idx) => (
                   <span
@@ -183,8 +184,8 @@ export default function SiteCard({ siteId, onClose, onGuideSelect }: SiteCardPro
               <div key={guide.id} className="guide-mini-card" onClick={() => onGuideSelect(guide)}>
                 <div className="guide-mini-info">
                   <strong>{guide.full_name}</strong>
-                  {guide.is_verified && <span className="verified-badge">✓</span>}
-                  <div className="guide-mini-rating">★ {guide.rating} ({guide.total_reviews})</div>
+                  {guide.is_verified && <span className="verified-badge"><HiCheck /></span>}
+                  <div className="guide-mini-rating"><HiStar /> {guide.rating} ({guide.total_reviews})</div>
                   <div className="guide-mini-price">
                     {parseInt(guide.price_per_hour).toLocaleString()} {t("so'm/soat", "сум/час", "sum/hour")}
                   </div>
