@@ -110,22 +110,45 @@ If you cannot identify the location or it's not a historical site, respond with 
       if (siteName && siteName !== 'unknown') {
         // Ищем совпадения в базе данных
         const sites = await api.getSites();
+
+        // Нормализуем имя сайта от AI
+        const normalizedSiteName = siteName.replace(/[-_\s]+/g, '').toLowerCase();
+
+        // Словарь соответствий ключевых слов
+        const keywordMap: Record<string, string[]> = {
+          'chilpyk': ['чилпык', 'chilpyk', 'chilpik'],
+          'ayaz': ['аяз', 'ayaz'],
+          'toprak': ['топрак', 'toprak'],
+          'kyzyl': ['кызыл', 'kyzyl', 'qizil'],
+          'mizdakhan': ['миздахан', 'mizdakhan', 'mizdaxon'],
+          'janbas': ['джанбас', 'janbas', 'janbaş'],
+          'gyaur': ['гяур', 'gyaur', 'gavur'],
+          'koy': ['кой', 'koy', 'qo\'y'],
+        };
+
+        // Определяем какое ключевое слово AI нашёл
+        let matchedKeyword: string | null = null;
+        for (const [key, variants] of Object.entries(keywordMap)) {
+          if (normalizedSiteName.includes(key)) {
+            matchedKeyword = key;
+            break;
+          }
+        }
+
         const matched = sites.filter((site: HistoricalSite) => {
           const nameRu = site.name_ru?.toLowerCase() || '';
           const nameEn = site.name_en?.toLowerCase() || '';
           const nameUz = site.name_uz?.toLowerCase() || '';
+          const allNames = `${nameRu} ${nameEn} ${nameUz}`;
 
-          return nameRu.includes(siteName) ||
-                 nameEn.includes(siteName) ||
-                 nameUz.includes(siteName) ||
-                 siteName.includes(nameRu.split(' ')[0]) ||
-                 siteName.includes(nameEn.split(' ')[0]) ||
-                 // Проверка ключевых слов
-                 (siteName.includes('kyzyl') && (nameRu.includes('кызыл') || nameEn.includes('kyzyl'))) ||
-                 (siteName.includes('ayaz') && (nameRu.includes('аяз') || nameEn.includes('ayaz'))) ||
-                 (siteName.includes('toprak') && (nameRu.includes('топрак') || nameEn.includes('toprak'))) ||
-                 (siteName.includes('chilpyk') && (nameRu.includes('чилпык') || nameEn.includes('chilpyk'))) ||
-                 (siteName.includes('mizdakhan') && (nameRu.includes('миздахан') || nameEn.includes('mizdakhan')));
+          // Если нашли ключевое слово, ищем точное соответствие
+          if (matchedKeyword) {
+            const variants = keywordMap[matchedKeyword];
+            return variants.some(v => allNames.includes(v));
+          }
+
+          // Иначе ищем по прямому вхождению
+          return allNames.includes(siteName) || siteName.includes(nameEn.split(' ')[0]);
         });
 
         setMatchedSites(matched);
