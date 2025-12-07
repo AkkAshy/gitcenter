@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapMarker } from '../types';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import { CityDrawer, CityControlPanel, City } from './CityDrawer';
 
 // Границы Каракалпакстана (точный полигон нарисованный пользователем)
 const KARAKALPAKSTAN_POLYGON: [number, number][] = [
@@ -453,6 +454,11 @@ export default function Map({ onSiteSelect, selectedSiteId }: MapProps) {
   const [drawPoints, setDrawPoints] = useState<[number, number][]>([]);
   const { lang } = useLanguage();
 
+  // Состояния для рисования городов
+  const [cities, setCities] = useState<City[]>([]);
+  const [activeCityId, setActiveCityId] = useState<string | null>(null);
+  const [cityDrawEnabled, setCityDrawEnabled] = useState(false);
+
   useEffect(() => {
     api.getMapMarkers().then(setMarkers);
   }, []);
@@ -478,6 +484,7 @@ export default function Map({ onSiteSelect, selectedSiteId }: MapProps) {
   const center: [number, number] = [42.46, 59.60];
 
   return (
+    <>
     <MapContainer
       center={center}
       zoom={7}
@@ -494,6 +501,15 @@ export default function Map({ onSiteSelect, selectedSiteId }: MapProps) {
       <RegionMask />
       <RegionBorder />
       <FlyToMarker position={flyToPosition} />
+
+      {/* Компонент для рисования границ городов */}
+      <CityDrawer
+        isEnabled={cityDrawEnabled}
+        cities={cities}
+        setCities={setCities}
+        activeCityId={activeCityId}
+        setActiveCityId={setActiveCityId}
+      />
       {DRAW_MODE && (
         <>
           <PolygonDrawer points={drawPoints} setPoints={setDrawPoints} />
@@ -569,5 +585,16 @@ export default function Map({ onSiteSelect, selectedSiteId }: MapProps) {
         </Marker>
       ))}
     </MapContainer>
+
+    {/* Панель управления городами */}
+    <CityControlPanel
+      isEnabled={cityDrawEnabled}
+      setIsEnabled={setCityDrawEnabled}
+      cities={cities}
+      setCities={setCities}
+      activeCityId={activeCityId}
+      setActiveCityId={setActiveCityId}
+    />
+  </>
   );
 }
