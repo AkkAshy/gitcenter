@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { HiMap, HiUserGroup, HiCamera, HiCalendar } from 'react-icons/hi';
 import './DemoPage.css';
+
+// Wrappers для react-icons (совместимость с React 19)
+const MapIcon = () => React.createElement(HiMap as React.ComponentType);
+const GuidesIcon = () => React.createElement(HiUserGroup as React.ComponentType);
+const CameraIcon = () => React.createElement(HiCamera as React.ComponentType);
+const CalendarIcon = () => React.createElement(HiCalendar as React.ComponentType);
 
 interface DemoContent {
   id: number;
@@ -42,7 +49,7 @@ const DemoPage: React.FC = () => {
     <div className="demo-page">
       <header className="demo-header">
         <Link to="/" className="demo-logo">
-          Khakathon
+          Khakaton
         </Link>
         <Link to="/" className="back-btn">
           На главную
@@ -51,7 +58,7 @@ const DemoPage: React.FC = () => {
 
       <main className="demo-content">
         <section className="demo-hero">
-          <h1>{demoContent?.title || 'Добро пожаловать в Khakathon'}</h1>
+          <h1>{demoContent?.title || 'Добро пожаловать в Khakaton'}</h1>
           <p className="demo-subtitle">
             {demoContent?.subtitle || 'Ваш путеводитель по удивительным местам Каракалпакстана'}
           </p>
@@ -88,7 +95,7 @@ const DemoPage: React.FC = () => {
           <h2>Что мы предлагаем</h2>
           <div className="features-grid">
             <div className="feature-card">
-              <div className="feature-icon">🗺️</div>
+              <div className="feature-icon"><MapIcon /></div>
               <h3>Интерактивная карта</h3>
               <p>
                 Исследуйте достопримечательности Каракалпакстана на интерактивной карте.
@@ -97,7 +104,7 @@ const DemoPage: React.FC = () => {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon">👤</div>
+              <div className="feature-icon"><GuidesIcon /></div>
               <h3>Профессиональные гиды</h3>
               <p>
                 Найдите опытных гидов, которые покажут вам самые красивые места
@@ -106,7 +113,7 @@ const DemoPage: React.FC = () => {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon">📸</div>
+              <div className="feature-icon"><CameraIcon /></div>
               <h3>Поиск по фото</h3>
               <p>
                 Загрузите фотографию места - и мы найдём его на карте
@@ -115,7 +122,7 @@ const DemoPage: React.FC = () => {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon">📅</div>
+              <div className="feature-icon"><CalendarIcon /></div>
               <h3>Онлайн бронирование</h3>
               <p>
                 Бронируйте экскурсии онлайн. Безопасная оплата
@@ -134,7 +141,7 @@ const DemoPage: React.FC = () => {
       </main>
 
       <footer className="demo-footer">
-        <p>&copy; 2024 Khakathon. Все права защищены.</p>
+        <p>&copy; 2025 Khakaton. Все права защищены.</p>
       </footer>
     </div>
   );

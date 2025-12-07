@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapMarker } from '../types';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
-import { CityDrawer, CityControlPanel, City } from './CityDrawer';
+// import { CityDrawer, CityControlPanel, City } from './CityDrawer';
 
 // Границы Каракалпакстана (точный полигон нарисованный пользователем)
 const KARAKALPAKSTAN_POLYGON: [number, number][] = [
@@ -342,6 +342,7 @@ L.Icon.Default.mergeOptions({
 interface MapProps {
   onSiteSelect: (siteId: number) => void;
   selectedSiteId?: number | null;
+  isLandingMode?: boolean;
 }
 
 function createColoredIcon(color: string) {
@@ -382,6 +383,50 @@ function MapBounds() {
     map.setMinZoom(7);
     map.setMaxZoom(18);
   }, [map]);
+
+  return null;
+}
+
+// Ключевые точки для панорамы (интересные места на карте)
+const PANORAMA_POINTS: [number, number][] = [
+  [42.46, 59.60],  // Центр Каракалпакстана
+  [41.55, 60.65],  // Юг (Хива направление)
+  [43.80, 59.00],  // Аральское море
+  [42.00, 57.50],  // Запад
+  [44.00, 61.00],  // Северо-восток
+];
+
+// Компонент авто-панорамирования для landing режима
+function AutoPan({ isActive }: { isActive: boolean }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    let pointIndex = 0;
+    let animationId: number;
+
+    const panToNext = () => {
+      const point = PANORAMA_POINTS[pointIndex];
+      map.panTo(point, {
+        duration: 8,
+        easeLinearity: 0.1
+      });
+
+      pointIndex = (pointIndex + 1) % PANORAMA_POINTS.length;
+    };
+
+    // Начинаем анимацию
+    panToNext();
+
+    // Переходим к следующей точке каждые 10 секунд
+    const intervalId = setInterval(panToNext, 10000);
+
+    return () => {
+      clearInterval(intervalId);
+      if (animationId) cancelAnimationFrame(animationId);
+    };
+  }, [isActive, map]);
 
   return null;
 }
@@ -448,16 +493,16 @@ function PolygonDrawer({ points, setPoints }: { points: [number, number][], setP
   return null;
 }
 
-export default function Map({ onSiteSelect, selectedSiteId }: MapProps) {
+export default function Map({ onSiteSelect, selectedSiteId, isLandingMode = false }: MapProps) {
   const [markers, setMarkers] = useState<MapMarker[]>([]);
   const [flyToPosition, setFlyToPosition] = useState<[number, number] | null>(null);
   const [drawPoints, setDrawPoints] = useState<[number, number][]>([]);
   const { lang } = useLanguage();
 
-  // Состояния для рисования городов
-  const [cities, setCities] = useState<City[]>([]);
-  const [activeCityId, setActiveCityId] = useState<string | null>(null);
-  const [cityDrawEnabled, setCityDrawEnabled] = useState(false);
+  // Состояния для рисования городов (закомментировано)
+  // const [cities, setCities] = useState<City[]>([]);
+  // const [activeCityId, setActiveCityId] = useState<string | null>(null);
+  // const [cityDrawEnabled, setCityDrawEnabled] = useState(false);
 
   useEffect(() => {
     api.getMapMarkers().then(setMarkers);
@@ -501,15 +546,16 @@ export default function Map({ onSiteSelect, selectedSiteId }: MapProps) {
       <RegionMask />
       <RegionBorder />
       <FlyToMarker position={flyToPosition} />
+      <AutoPan isActive={isLandingMode} />
 
-      {/* Компонент для рисования границ городов */}
-      <CityDrawer
+      {/* Компонент для рисования границ городов (закомментировано) */}
+      {/* <CityDrawer
         isEnabled={cityDrawEnabled}
         cities={cities}
         setCities={setCities}
         activeCityId={activeCityId}
         setActiveCityId={setActiveCityId}
-      />
+      /> */}
       {DRAW_MODE && (
         <>
           <PolygonDrawer points={drawPoints} setPoints={setDrawPoints} />
@@ -586,15 +632,17 @@ export default function Map({ onSiteSelect, selectedSiteId }: MapProps) {
       ))}
     </MapContainer>
 
-    {/* Панель управления городами */}
-    <CityControlPanel
-      isEnabled={cityDrawEnabled}
-      setIsEnabled={setCityDrawEnabled}
-      cities={cities}
-      setCities={setCities}
-      activeCityId={activeCityId}
-      setActiveCityId={setActiveCityId}
-    />
+    {/* Панель управления городами (закомментировано) */}
+    {/* {!isLandingMode && (
+      <CityControlPanel
+        isEnabled={cityDrawEnabled}
+        setIsEnabled={setCityDrawEnabled}
+        cities={cities}
+        setCities={setCities}
+        activeCityId={activeCityId}
+        setActiveCityId={setActiveCityId}
+      />
+    )} */}
   </>
   );
 }
