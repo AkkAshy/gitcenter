@@ -18,7 +18,7 @@ interface DemoContent {
   created_at: string;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL = 'https://akkanat.pythonanywhere.com';
 
 const DemoPage: React.FC = () => {
   const [demoContent, setDemoContent] = useState<DemoContent | null>(null);
